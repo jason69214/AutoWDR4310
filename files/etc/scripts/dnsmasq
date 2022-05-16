@@ -1,0 +1,5 @@
+#!/bin/sh
+curl 'https://gitee.com/zcy85611/dnsmasq_rules/raw/main/chinalist+easylist.conf' > /etc/dnsmasq.d/chinalist+easylist.conf
+curl 'https://gitee.com/zcy85611/dnsmasq_rules/raw/main/cjxlist.conf' > /etc/dnsmasq.d/cjxlist.conf
+curl 'https://gitee.com/zcy85611/dnsmasq_rules/raw/main/gfwlist.conf' > /etc/dnsmasq.d/gfwlist.conf
+/etc/init.d/dnsmasq restart

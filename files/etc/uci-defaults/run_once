@@ -1,0 +1,47 @@
+#!/bin/sh
+chmod +x -R /etc/scripts/*
+chmod +x -R /etc/init.d/*
+echo "public:$(openssl passwd 123456)" >/etc/nginx/webdavpasswd
+echo "conf-dir=/etc/dnsmasq.d" >> /etc/dnsmasq.conf
+uci set firewall.@defaults[0].flow_offloading='1'
+uci set firewall.@defaults[0].flow_offloading_hw='1'
+uci add firewall rule 
+uci set firewall.@rule[-1].name="Allow Aliyun SSL"
+uci set firewall.@rule[-1].family="ipv6"
+uci set firewall.@rule[-1].src="wan"
+uci set firewall.@rule[-1].dest_port="31667"
+uci set firewall.@rule[-1].target="ACCEPT"
+uci add firewall rule 
+uci set firewall.@rule[-1].name="Allow Webdav SSL"
+uci set firewall.@rule[-1].family="ipv6"
+uci set firewall.@rule[-1].src="wan"
+uci set firewall.@rule[-1].dest_port="31668"
+uci set firewall.@rule[-1].target="ACCEPT"
+uci delete nginx._redirect2ssl.return='302 https://$host$request_uri'
+uci add_list nginx._redirect2ssl.include='restrict_locally'
+uci add_list nginx._redirect2ssl.include='conf.d/*.locations'
+uci set nginx._redirect2ssl.access_log='off'
+uci commit
+/etc/init.d/firewall restart
+/etc/init.d/dnsmasq restart
+/etc/init.d/nginx reload
+/etc/init.d/p910nd disable
+/etc/init.d/udptools disable
+/etc/init.d/nfsd disable
+/etc/init.d/xray disable
+/etc/init.d/wireguard disable
+/etc/init.d/omcproxy disable
+/etc/init.d/udpxy disable
+/etc/init.d/xupnpd disable
+/etc/init.d/baidupcs-web disable
+/etc/init.d/samba4 disable
+/etc/init.d/wsdd2 disable
+/etc/init.d/vsftpd disable
+/etc/init.d/aria2 disable
+sed -i '$d' /etc/rc.local
+cat >> /etc/rc.local << EOF
+sleep 50s
+/etc/init.d/xray start
+exit 0
+EOF
+exit 0

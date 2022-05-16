@@ -1,0 +1,15 @@
+
+config server
+	option debug '0'
+	option port '8080'
+	option root '/'
+	option no_trash '0'
+	option read_only '0'
+	option enable '1'
+	option host '::'
+	option auth_user 'micki'
+	option auth_password '123456'
+	option read_buffer_size '2621440'
+	option cache_size '250'
+	option cache_ttl '250'
+

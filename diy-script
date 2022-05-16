@@ -1,0 +1,22 @@
+#!/bin/bash
+curl --create-dirs -o files/etc/xray/tmp_ip 'https://ispip.clang.cn/all_cn.txt'
+echo "create China hash:net family inet hashsize 2048 maxelem 65536" > files/etc/xray/cn_ip
+awk '{print "add China "$0}' files/etc/xray/tmp_ip >> files/etc/xray/cn_ip
+rm files/etc/xray/tmp_ip
+curl --create-dirs -o files/etc/xray/tmpcf_ip 'https://www.cloudflare.com/ips-v4'
+echo "create Cloudflare hash:net family inet hashsize 2048 maxelem 65536" > files/etc/xray/CF_ip
+awk '{print "add Cloudflare "$0}' files/etc/xray/tmpcf_ip >> files/etc/xray/CF_ip
+rm files/etc/xray/tmpcf_ip
+curl --create-dirs -o files/etc/dnsmasq.d/gfwlist.conf 'https://raw.githubusercontent.com/zcy85611/gfwlist/main/gfwlist.conf'
+curl https://easylist-downloads.adblockplus.org/easylistchina+easylist.txt | grep ^\|\|[^\*]*\^$ | sed -e 's:||:address\=\/:' -e 's:\^:/0\.0\.0\.0:' > files/etc/dnsmasq.d/chinalist+easylist.conf
+curl https://raw.githubusercontent.com/cjx82630/cjxlist/master/cjx-annoyance.txt | grep ^\|\|[^\*]*\^$ | sed -e 's:||:address\=\/:' -e 's:\^:/0\.0\.0\.0:' > files/etc/dnsmasq.d/cjxlist.conf
+sed -i 's/192.168.1.1/192.168.77.1/g' package/base-files/files/bin/config_generate
+sed -i 's/set wireless.radio${devidx}.disabled=1/set wireless.radio${devidx}.disabled=0/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
+echo 'fs.file-max=9999999'>> package/base-files/files/etc/sysctl.d/10-default.conf
+git clone https://github.com/zcy85611/Packages.git package/leozhao
+git clone https://github.com/messense/aliyundrive-webdav.git ali && mv ali/openwrt/* package/leozhao
+sed -i '38itools-y += ucl upx' tools/Makefile
+sed -i '39i$(curdir)/upx/compile := $(curdir)/ucl/compile' tools/Makefile
+sed -i '/procd_add_jail/d' package/feeds/packages/aria2/files/aria2.init
+sed -i '/procd_add_jail/d' package/network/services/dnsmasq/files/dnsmasq.init
+./scripts/feeds install -a

@@ -1,0 +1,62 @@
+diff --git a/target/linux/ramips/image/mt7620.mk b/target/linux/ramips/image/mt7620.mk
+index 86751aad31..d51a6c9b17 100644
+--- a/target/linux/ramips/image/mt7620.mk
++++ b/target/linux/ramips/image/mt7620.mk
+@@ -673,6 +673,16 @@ define Device/lenovo_newifi-y1s
+ endef
+ TARGET_DEVICES += lenovo_newifi-y1s
+ 
++define Device/5k_w20
++  SOC := mt7620a
++  IMAGE_SIZE := 16064k
++  DEVICE_VENDOR := 5k
++  DEVICE_MODEL := W20
++  DEVICE_PACKAGES := kmod-mt76x2 kmod-usb2 kmod-usb-ohci
++  SUPPORTED_DEVICES += w20
++endef
++TARGET_DEVICES += 5k_w20
++
+ define Device/linksys_e1700
+   SOC := mt7620a
+   IMAGE_SIZE := 7872k
+diff --git a/target/linux/ramips/mt7620/base-files/etc/board.d/01_leds b/target/linux/ramips/mt7620/base-files/etc/board.d/01_leds
+index ff3a5c8c0c..36bdc758c5 100644
+--- a/target/linux/ramips/mt7620/base-files/etc/board.d/01_leds
++++ b/target/linux/ramips/mt7620/base-files/etc/board.d/01_leds
+@@ -157,6 +157,9 @@ lenovo,newifi-y1s)
+ 	ucidef_set_led_netdev "wifi5g" "WIFI5G" "blue:wifi" "wlan0"
+ 	ucidef_set_led_netdev "wan" "WAN" "blue:internet" "eth0.2" "tx rx"
+ 	;;
++5k,w20)
++	ucidef_set_led_netdev "wifi" "WIFI" "green:wifi" "wlan0"
++	;;
+ netgear,ex2700|\
+ netgear,wn3000rp-v3)
+ 	ucidef_set_led_netdev "wifi_led" "wifi" "green:router" "wlan0"
+diff --git a/target/linux/ramips/mt7620/base-files/etc/board.d/02_network b/target/linux/ramips/mt7620/base-files/etc/board.d/02_network
+index 6732a2cb0b..d345caaa48 100644
+--- a/target/linux/ramips/mt7620/base-files/etc/board.d/02_network
++++ b/target/linux/ramips/mt7620/base-files/etc/board.d/02_network
+@@ -188,6 +188,10 @@ ramips_setup_interfaces()
+ 		ucidef_add_switch "switch0" \
+ 			"1:lan:4" "2:lan:3" "4:lan:2" "5:lan:1" "0:wan" "6@eth0"
+ 		;;
++	5k,w20)
++		ucidef_add_switch "switch0" \
++			"1:lan:4" "2:lan:3" "0:wan" "6@eth0"
++		;;
+ 	linksys,e1700|\
+ 	netis,wf2770|\
+ 	ralink,mt7620a-mt7530-evb)
+diff --git a/tools/Makefile b/tools/Makefile
+index a48aa80db3..e915d1c65c 100644
+--- a/tools/Makefile
++++ b/tools/Makefile
+@@ -36,6 +36,7 @@ tools-$(CONFIG_TARGET_tegra) += cbootimage cbootimage-configs
+ tools-$(CONFIG_USES_MINOR) += kernel2minor
+ tools-$(CONFIG_USE_SPARSE) += sparse
+ 
++$(curdir)/upx/compile := $(curdir)/ucl/compile
+ # builddir dependencies
+ $(curdir)/autoconf/compile := $(curdir)/m4/compile
+ $(curdir)/automake/compile := $(curdir)/m4/compile $(curdir)/autoconf/compile $(curdir)/pkgconf/compile $(curdir)/xz/compile

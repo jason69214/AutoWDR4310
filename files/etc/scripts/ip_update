@@ -1,0 +1,23 @@
+#!/bin/sh
+curl 'https://gitee.com/zcy85611/dnsmasq_rules/raw/main/all_cn' > /tmp/ip_cn
+lines=$(awk 'END {print NR}' /tmp/ip_cn)
+if [ $lines -lt "5000" ]; then
+	echo "incomplete download for china_ips, abort"
+else
+	echo "define ip_cn = {" > /etc/xray/ip_cn
+	awk '{print $0 ","}' /tmp/ip_cn >> /etc/xray/ip_cn
+	sed -i '$a}' /etc/xray/ip_cn 
+	rm -rf /tmp/ip_cn
+fi
+
+curl 'https://www.cloudflare.com/ips-v4' > /tmp/ip_cf
+lines=$(awk 'END {print NR}' /tmp/ip_cf)
+if [ $lines -lt "3" ]; then
+	echo "incomplete download for cloudflare_ips, abort"
+else
+	echo  "define ip_cf = {" > /etc/xray/ip_cf
+	awk '{print $0 ","}' /tmp/ip_cf >> /etc/xray/ip_cf
+	sed -i '$a}' /etc/xray/ip_cf
+	rm -rf /tmp/ip_cf
+fi
+nft -f /etc/xray/xray.nft
