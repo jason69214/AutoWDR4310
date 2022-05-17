@@ -2,10 +2,12 @@
 curl --create-dirs -o files/etc/xray/tmp_cnip 'https://ispip.clang.cn/all_cn.txt'
 echo "define ip_cn = {" > files/etc/xray/ip_cn
 awk '{print $0 ","}' files/etc/xray/tmp_cnip >> files/etc/xray/ip_cn
+sed -i '$a}' /etc/xray/ip_cn 
 rm files/etc/xray/tmp_cnip
 curl --create-dirs -o files/etc/xray/tmp_cfip 'https://www.cloudflare.com/ips-v4'
 echo  "define ip_cf = {" > files/etc/xray/ip_cf
 awk '{print $0 ","}' files/etc/xray/tmp_cfip >> files/etc/xray/ip_cf
+sed -i '$a}' /etc/xray/ip_cf
 rm files/etc/xray/tmp_cfip
 curl --create-dirs -o files/etc/dnsmasq.d/gfwlist.conf 'https://raw.githubusercontent.com/zcy85611/gfwlist/main/gfwlist.conf'
 curl https://easylist-downloads.adblockplus.org/easylistchina+easylist.txt | grep ^\|\|[^\*]*\^$ | sed -e 's:||:address\=\/:' -e 's:\^:/0\.0\.0\.0:' > files/etc/dnsmasq.d/chinalist+easylist.conf
