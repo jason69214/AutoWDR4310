@@ -1,12 +1,12 @@
 #!/bin/bash
-curl --create-dirs -o files/etc/xray/tmp_ip 'https://ispip.clang.cn/all_cn.txt'
-echo "create China hash:net family inet hashsize 2048 maxelem 65536" > files/etc/xray/cn_ip
-awk '{print "add China "$0}' files/etc/xray/tmp_ip >> files/etc/xray/cn_ip
-rm files/etc/xray/tmp_ip
-curl --create-dirs -o files/etc/xray/tmpcf_ip 'https://www.cloudflare.com/ips-v4'
-echo "create Cloudflare hash:net family inet hashsize 2048 maxelem 65536" > files/etc/xray/CF_ip
-awk '{print "add Cloudflare "$0}' files/etc/xray/tmpcf_ip >> files/etc/xray/CF_ip
-rm files/etc/xray/tmpcf_ip
+curl --create-dirs -o files/etc/xray/tmp_cnip 'https://ispip.clang.cn/all_cn.txt'
+echo "define ip_cn = {" > files/etc/xray/ip_cn
+awk '{print $0 ","}' files/etc/xray/tmp_cnip >> files/etc/xray/ip_cn
+rm files/etc/xray/tmp_cnip
+curl --create-dirs -o files/etc/xray/tmp_cfip 'https://www.cloudflare.com/ips-v4'
+echo  "define ip_cf = {" > files/etc/xray/ip_cf
+awk '{print $0 ","}' files/etc/xray/tmp_cfip >> files/etc/xray/ip_cf
+rm files/etc/xray/tmp_cfip
 curl --create-dirs -o files/etc/dnsmasq.d/gfwlist.conf 'https://raw.githubusercontent.com/zcy85611/gfwlist/main/gfwlist.conf'
 curl https://easylist-downloads.adblockplus.org/easylistchina+easylist.txt | grep ^\|\|[^\*]*\^$ | sed -e 's:||:address\=\/:' -e 's:\^:/0\.0\.0\.0:' > files/etc/dnsmasq.d/chinalist+easylist.conf
 curl https://raw.githubusercontent.com/cjx82630/cjxlist/master/cjx-annoyance.txt | grep ^\|\|[^\*]*\^$ | sed -e 's:||:address\=\/:' -e 's:\^:/0\.0\.0\.0:' > files/etc/dnsmasq.d/cjxlist.conf
