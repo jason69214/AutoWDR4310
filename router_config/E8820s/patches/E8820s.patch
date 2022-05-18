@@ -1,8 +1,8 @@
 diff --git a/target/linux/ramips/image/mt7621.mk b/target/linux/ramips/image/mt7621.mk
-index cbdc63247d..90ef561289 100644
+index cbdc63247d..0eddae0a9a 100644
 --- a/target/linux/ramips/image/mt7621.mk
 +++ b/target/linux/ramips/image/mt7621.mk
-@@ -2090,6 +2090,24 @@ define Device/zio_freezio
+@@ -2090,6 +2090,21 @@ define Device/zio_freezio
  endef
  TARGET_DEVICES += zio_freezio
  
@@ -14,10 +14,7 @@ index cbdc63247d..90ef561289 100644
 +  KERNEL_SIZE := 4096k
 +  UBINIZE_OPTS := -E 5
 +  IMAGE_SIZE := 130304k
-+  IMAGES += factory.bin
 +  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
-+  IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-ubi | \
-+	check-size
 +  DEVICE_VENDOR := ZTE
 +  DEVICE_MODEL := E8820S
 +  DEVICE_PACKAGES := kmod-mt7603 kmod-mt76x2 kmod-usb3 uboot-envtools
