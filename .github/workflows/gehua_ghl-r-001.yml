@@ -64,6 +64,7 @@ jobs:
         echo "CONFIG_TARGET_ramips_mt7621=y" >> config
         echo "CONFIG_TARGET_ramips_mt7621_DEVICE_gehua_ghl-r-001=y" >> config
         sed -i '/kmod-sdhci/d' config
+        sed -i '/baidupcs/d' config
         cp -r router_config/gehua_ghl-r-001/uci-defaults files/etc
         [ -e files ] && mv files openwrt/files && rm -rf openwrt/files/usr && rm openwrt/files/etc/config/transmission
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config

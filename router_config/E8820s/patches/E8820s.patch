@@ -1,31 +1,37 @@
 diff --git a/target/linux/ramips/image/mt7621.mk b/target/linux/ramips/image/mt7621.mk
-index 3b68a76b3e..99d20dccd9 100644
+index cbdc63247d..90ef561289 100644
 --- a/target/linux/ramips/image/mt7621.mk
 +++ b/target/linux/ramips/image/mt7621.mk
-@@ -1766,3 +1766,17 @@ define Device/zyxel_wap6805
-   IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
+@@ -2090,6 +2090,24 @@ define Device/zio_freezio
  endef
- TARGET_DEVICES += zyxel_wap6805
-+
+ TARGET_DEVICES += zio_freezio
+ 
 +define Device/zte_e8820s
 +  $(Device/dsa-migration)
++  $(Device/uimage-lzma-loader)
 +  BLOCKSIZE := 128k
 +  PAGESIZE := 2048
 +  KERNEL_SIZE := 4096k
 +  UBINIZE_OPTS := -E 5
 +  IMAGE_SIZE := 130304k
++  IMAGES += factory.bin
 +  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
++  IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-ubi | \
++	check-size
 +  DEVICE_VENDOR := ZTE
 +  DEVICE_MODEL := E8820S
-+  DEVICE_PACKAGES := kmod-mt7603 kmod-mt76x2 kmod-usb3
++  DEVICE_PACKAGES := kmod-mt7603 kmod-mt76x2 kmod-usb3 uboot-envtools
 +endef
 +TARGET_DEVICES += zte_e8820s
-\ No newline at end of file
++
+ define Device/zyxel_nr7101
+   $(Device/dsa-migration)
+   BLOCKSIZE := 128k
 diff --git a/target/linux/ramips/mt7621/base-files/etc/board.d/01_leds b/target/linux/ramips/mt7621/base-files/etc/board.d/01_leds
-index 6e6cd747c4..45b48442f8 100644
+index 2cb8fdb557..4b3a77206f 100644
 --- a/target/linux/ramips/mt7621/base-files/etc/board.d/01_leds
 +++ b/target/linux/ramips/mt7621/base-files/etc/board.d/01_leds
-@@ -125,6 +125,10 @@ xiaomi,redmi-router-ac2100)
+@@ -142,6 +142,10 @@ xiaomi,redmi-router-ac2100)
  youhua,wr1200js)
  	ucidef_set_led_netdev "internet" "INTERNET" "green:wan" "wan"
  	;;
@@ -33,14 +39,14 @@ index 6e6cd747c4..45b48442f8 100644
 +	ucidef_set_led_netdev "sys" "SYS_LED" "white:sys" "eth0" "tx rx"
 +	ucidef_set_led_timer "power" "POWER_LED" "white:sys" "100" "8000"
 +	;;
- esac
- 
- board_config_flush
+ zbtlink,zbt-wg1608-16m)
+ 	ucidef_set_led_netdev "lan1" "LAN1" "green:lan-1" "lan1"
+ 	ucidef_set_led_netdev "lan2" "LAN2" "green:lan-2" "lan2"
 diff --git a/target/linux/ramips/mt7621/base-files/lib/upgrade/platform.sh b/target/linux/ramips/mt7621/base-files/lib/upgrade/platform.sh
-index 6e8e205403..274b68ba83 100755
+index c818c7e7cc..1ccaa1b8a6 100755
 --- a/target/linux/ramips/mt7621/base-files/lib/upgrade/platform.sh
 +++ b/target/linux/ramips/mt7621/base-files/lib/upgrade/platform.sh
-@@ -57,6 +57,9 @@ platform_do_upgrade() {
+@@ -58,6 +58,9 @@ platform_do_upgrade() {
  	dlink,dir-2640-a1|\
  	dlink,dir-2660-a1|\
  	dlink,dir-853-a3|\
@@ -48,5 +54,5 @@ index 6e8e205403..274b68ba83 100755
 +		nand_do_upgrade "$1"
 +		;;
  	hiwifi,hc5962|\
- 	jcg,q20|\
- 	linksys,e5600|\
+ 	iptime,a3004t|\
+ 	iptime,ax2004m|\
