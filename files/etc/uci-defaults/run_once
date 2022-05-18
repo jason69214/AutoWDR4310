@@ -32,16 +32,18 @@ uci commit
 /etc/init.d/wireguard disable
 /etc/init.d/omcproxy disable
 /etc/init.d/udpxy disable
+/etc/init.d/aliyundrive-webdav disable
+/etc/init.d/nft-qos disable
 /etc/init.d/xupnpd disable
 /etc/init.d/baidupcs-web disable
 /etc/init.d/samba4 disable
 /etc/init.d/wsdd2 disable
 /etc/init.d/vsftpd disable
 /etc/init.d/aria2 disable
-sed -i '$d' /etc/rc.local
-cat >> /etc/rc.local << EOF
-sleep 50s
-/etc/init.d/xray start
-exit 0
-EOF
-exit 0
+# sed -i '$d' /etc/rc.local
+# cat >> /etc/rc.local << EOF
+# sleep 50s
+# /etc/init.d/xray start
+# exit 0
+# EOF
+# exit 0
