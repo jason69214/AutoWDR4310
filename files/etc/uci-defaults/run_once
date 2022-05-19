@@ -22,7 +22,7 @@ uci add_list nginx._redirect2ssl.include='restrict_locally'
 uci add_list nginx._redirect2ssl.include='conf.d/*.locations'
 uci set nginx._redirect2ssl.access_log='off'
 uci commit
-sed $'s/${vendorid:+-V "$vendorid"}/${vendorid:+-V \'\' "-x 0x3c:$vendorid"}/g' /lib/netifd/proto/dhcp.sh
+sed -i $'s/${vendorid:+-V "$vendorid"}/${vendorid:+-V \'\' "-x 0x3c:$vendorid"}/g' /lib/netifd/proto/dhcp.sh
 /etc/init.d/firewall restart
 /etc/init.d/dnsmasq restart
 /etc/init.d/nginx reload
