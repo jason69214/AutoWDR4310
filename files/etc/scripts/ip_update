@@ -1,5 +1,5 @@
 #!/bin/sh
-curl 'https://gitee.com/zcy85611/dnsmasq_rules/raw/main/all_cn' > /tmp/ip_cn
+curl --connect-timeout 15 'https://raw.githubusercontent.com/zcy85611/dnsmasq_rules/main/all_cn' > /tmp/ip_cn
 lines=$(awk 'END {print NR}' /tmp/ip_cn)
 if [ $lines -lt "5000" ]; then
 	echo "incomplete download for china_ips, abort"
@@ -10,7 +10,7 @@ else
 	rm -rf /tmp/ip_cn
 fi
 
-curl 'https://www.cloudflare.com/ips-v4' > /tmp/ip_cf
+curl --connect-timeout 15 'https://www.cloudflare.com/ips-v4' > /tmp/ip_cf
 lines=$(awk 'END {print NR}' /tmp/ip_cf)
 if [ $lines -lt "3" ]; then
 	echo "incomplete download for cloudflare_ips, abort"
