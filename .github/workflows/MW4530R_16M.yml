@@ -75,7 +75,7 @@ jobs:
         rm -rf files/etc/config/transmission
         [ -e files ] && mv files openwrt/files
         cp -rf router_config/low_end_routers/run_once openwrt/files/etc/uci-defaults && cp -rf router_config/low_end_routers/unbound.conf openwrt/files/etc/unbound
-        cp -rf router_config/wdr4310/patches/wdr4310.patch openwrt/
+        cp -rf router_config/mw4530r/patches/mw4530r.patch openwrt/
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         mv Aria2/patches openwrt/package/feeds/packages/aria2
         chmod +x $DIY_SH
