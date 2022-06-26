@@ -1,35 +1,22 @@
 #!/bin/sh
 chmod +x -R /etc/scripts/*
 chmod +x -R /etc/init.d/*
+echo "public:$(openssl passwd 123456)" >/etc/nginx/webdavpasswd
 echo "conf-dir=/etc/dnsmasq.d" >> /etc/dnsmasq.conf
-uci set network.wg0='interface'
-uci set network.wg0.proto='wireguard'
-uci set network.wg0.private_key='uFukl+cqM/ejyG7pkR1AUn+RDXqQQDGU/PfGtwj81111'
-uci set network.wg0.mtu='1280'
-uci set network.wg0.auto='0'
-uci add_list network.wg0.addresses="10.1.1.2/32"
-uci set network.wg0.peerdns='0'
-uci add_list network.wg0.dns="223.5.5.5"
-uci add_list network.wg0.dns="114.114.114.114"
-uci add network wireguard_wg0
-uci set network.@wireguard_wg0[0].description='VPS'
-uci set network.@wireguard_wg0[0].public_key='G9cOmJ4pmxZZ5d8ncBhsjpet2ef+BCD4oYazErW61111'
-uci set network.@wireguard_wg0[0].route_allowed_ips='1'
-uci add_list network.@wireguard_wg0[0].allowed_ips="0.0.0.0/0"
-uci set network.@wireguard_wg0[0].persistent_keepalive='25'
-uci set network.@wireguard_wg0[0].endpoint_host='127.0.0.1'
-uci set network.@wireguard_wg0[0].endpoint_port='21333'
-uci add firewall zone
-uci set firewall.@zone[2].name='wg0'
-uci set firewall.@zone[2].input='ACCEPT'
-uci set firewall.@zone[2].output='ACCEPT'
-uci set firewall.@zone[2].forward='REJECT'
-uci set firewall.@zone[2].masq='1'
-uci set firewall.@zone[2].mtu_fix='1'
-uci add_list firewall.@zone[2].network='wg0'
-uci add firewall forwarding
-uci set firewall.@forwarding[1].src='lan'
-uci set firewall.@forwarding[1].dest='wg0'
+uci set firewall.@defaults[0].flow_offloading='1'
+uci set firewall.@defaults[0].flow_offloading_hw='1'
+uci add firewall rule 
+uci set firewall.@rule[-1].name="Allow Aliyun SSL"
+uci set firewall.@rule[-1].family="ipv6"
+uci set firewall.@rule[-1].src="wan"
+uci set firewall.@rule[-1].dest_port="31667"
+uci set firewall.@rule[-1].target="ACCEPT"
+uci add firewall rule 
+uci set firewall.@rule[-1].name="Allow Webdav SSL"
+uci set firewall.@rule[-1].family="ipv6"
+uci set firewall.@rule[-1].src="wan"
+uci set firewall.@rule[-1].dest_port="31668"
+uci set firewall.@rule[-1].target="ACCEPT"
 uci delete nginx._redirect2ssl.return='302 https://$host$request_uri'
 uci add_list nginx._redirect2ssl.include='restrict_locally'
 uci add_list nginx._redirect2ssl.include='conf.d/*.locations'
@@ -39,22 +26,7 @@ uci commit
 /etc/init.d/dnsmasq restart
 /etc/init.d/nginx reload
 /etc/init.d/p910nd disable
-/etc/init.d/udptools disable
 /etc/init.d/nfsd disable
 /etc/init.d/wireguard disable
-/etc/init.d/omcproxy disable
-/etc/init.d/udpxy disable
 /etc/init.d/aria2 disable
-sed -i '$d' /etc/rc.local
-cat >> /etc/rc.local << EOF
-ipset -N forceproxy hash:net
-ipset -N gfwlist hash:net
-ipset -N Cloudflare hash:net
-sleep 80s
-ipset -! restore -f /etc/xray/cn_ip
-ipset -! restore -f /etc/xray/CF_ip
-# /etc/init.d/udptools start
-# /etc/init.d/wireguard start
-exit 0
-EOF
 exit 0
