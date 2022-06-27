@@ -67,13 +67,14 @@ jobs:
         sed -i '12,14d' diy-script
         sed -i '/tools-y/d' diy-script
         sed -i '/curdir/d' diy-script
-        cp -r router_config/mw4530r/uci-defaults files/etc
+        cp -rf router_config/mw4530r/uci-defaults files/etc
         rm -rf files/etc/dnsmasq.d/apple.conf
         rm -rf files/etc/crontabs
         rm -rf files/etc/config/aliyundrive-webdav
         rm -rf files/usr
         rm -rf files/etc/config/transmission
         [ -e files ] && mv files openwrt/files
+        cp -rf *.patch openwrt/target/linux/generic/hack-5.10/
         cp -rf router_config/low_end_routers/run_once openwrt/files/etc/uci-defaults && cp -rf router_config/low_end_routers/unbound.conf openwrt/files/etc/unbound
         cp -rf router_config/mw4530r/patches/mw4530r.patch openwrt/
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
