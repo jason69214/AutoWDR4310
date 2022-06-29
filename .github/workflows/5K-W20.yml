@@ -65,15 +65,18 @@ jobs:
         echo "CONFIG_TARGET_ramips_mt7620_DEVICE_5k_w20=y" >> config
         echo "CONFIG_HAS_SUBTARGETS=y" >> config
         echo "CONFIG_HAS_DEVICES=y" >> config
-        cp -r router_config/5K-W20/uci-defaults files/etc
-        sed -i '/xray/d' config
-        sed -i '/samba4/d' config
-        sed -i '/baidu/d' config
-        sed -i '/kmod-sdhci/d' config
+        cp -rf router_config/low_end_routers/config config
+        sed -i '12,14d' diy-script
         sed -i '/tools-y/d' diy-script
         sed -i '/curdir/d' diy-script
-        [ -e files ] && mv files openwrt/files && rm -rf openwrt/files/usr && rm openwrt/files/etc/config/transmission && rm openwrt/files/etc/init.d/xray
-        cp -rf router_config/low_end_routers/run_once openwrt/files/etc/uci-defaults/run_once && cp -rf router_config/low_end_routers/unbound.conf openwrt/files/etc/unbound/unbound.conf
+        cp -r router_config/5K-W20/uci-defaults files/etc
+        rm -rf files/etc/dnsmasq.d/apple.conf
+        rm -rf files/etc/crontabs
+        rm -rf files/etc/config/aliyundrive-webdav
+        rm -rf files/usr
+        rm -rf files/etc/config/transmission
+        [ -e files ] && mv files openwrt/files
+        cp -rf router_config/low_end_routers/run_once openwrt/files/etc/uci-defaults && cp -rf router_config/low_end_routers/unbound.conf openwrt/files/etc/unbound
         cp -rf router_config/5K-W20/mt7620a_5k_w20.dts openwrt/target/linux/ramips/dts/ && cp -rf router_config/5K-W20/patches/5k_w20.patch openwrt/
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         mv Aria2/patches openwrt/package/feeds/packages/aria2

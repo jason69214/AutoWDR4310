@@ -53,9 +53,6 @@ jobs:
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
-        # cd openwrt
-        # git checkout 76725938f1aa73330e8abeb8744871996f42422f
-        # cd ..
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
         
     - name: Update feeds
@@ -68,8 +65,6 @@ jobs:
         echo "CONFIG_TARGET_ramips_mt7621_DEVICE_zte_e8820s=y" >> config
         echo "CONFIG_PACKAGE_rMfakecloud=y" >> config
         sed -i '/kmod-sdhci/d' config
-        sed -i 's/sleep/# sleep/' files/etc/uci-defaults/run_once
-        sed -i 's/\/etc\/init.d\/xray start/\# \/etc\/init.d\/xray start/' files/etc/uci-defaults/run_once
         cp -r router_config/E8820s/uci-defaults files/etc
         cp -rf router_config/E8820s/mt7621_zte_e8820s.dts openwrt/target/linux/ramips/dts/ && cp -rf router_config/E8820s/patches/E8820s.patch openwrt/
         [ -e files ] && mv files openwrt/files && rm -rf openwrt/files/usr && rm openwrt/files/etc/config/transmission
