@@ -15,9 +15,9 @@
 # CONFIG_TARGET_ramips_mt7621_DEVICE_zte_e8820s=y
 
 # Third Party
-CONFIG_PACKAGE_luci-udptools=y
-CONFIG_PACKAGE_udpspeeder-tunnel=y
-CONFIG_PACKAGE_udp2raw-tunnel=y
+# CONFIG_PACKAGE_luci-udptools=y
+# CONFIG_PACKAGE_udpspeeder-tunnel=y
+# CONFIG_PACKAGE_udp2raw-tunnel=y
 CONFIG_PACKAGE_xray-LZMA=y
 CONFIG_PACKAGE_luci-app-vlmcsd=y
 CONFIG_PACKAGE_luci-app-baidupcs-web=y
@@ -41,7 +41,7 @@ CONFIG_PACKAGE_dnsmasq=n
 CONFIG_PACKAGE_dnsmasq-full=y
 CONFIG_PACKAGE_ca-bundle=y
 CONFIG_PACKAGE_ca-certificates=y
-CONFIG_PACKAGE_ip-full=y
+# CONFIG_PACKAGE_ip-full=y
 CONFIG_PACKAGE_wget-ssl=y
 CONFIG_PACKAGE_curl=y
 CONFIG_PACKAGE_bind-dig=y
@@ -73,7 +73,7 @@ CONFIG_PACKAGE_luci-app-p910nd=y
 CONFIG_PACKAGE_luci-app-nft-qos=y
 CONFIG_PACKAGE_luci-app-udpxy=y
 CONFIG_PACKAGE_luci-app-omcproxy=y
-CONFIG_PACKAGE_luci-app-ttyd=y
+# CONFIG_PACKAGE_luci-app-ttyd=y
 CONFIG_PACKAGE_luci-app-wireguard=y
 CONFIG_PACKAGE_luci-app-unbound=y
 CONFIG_PACKAGE_luci-theme-bootstrap=y
