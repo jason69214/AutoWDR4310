@@ -61,6 +61,7 @@ jobs:
         echo "CONFIG_TARGET_ramips=y" >> config
         echo "CONFIG_TARGET_ramips_mt7621=y" >> config
         echo "CONFIG_TARGET_ramips_mt7621_DEVICE_zte_e8820s=y" >> config
+        echo "CONFIG_PACKAGE_rMfakecloud=y" >> config
         sed -i '/kmod-sdhci/d' config
         cp -r router_config/E8820s/uci-defaults files/etc
         cp -rf router_config/E8820s/mt7621_zte_e8820s.dts openwrt/target/linux/ramips/dts/ && cp -rf router_config/E8820s/patches/E8820s.patch openwrt/
