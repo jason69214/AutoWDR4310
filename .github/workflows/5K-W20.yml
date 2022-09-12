@@ -60,12 +60,12 @@ jobs:
 
     - name: Load custom configuration
       run: |
+        cp -rf router_config/low_end_routers/config config
         echo "CONFIG_TARGET_ramips=y" >> config
         echo "CONFIG_TARGET_ramips_mt7620=y" >> config
         echo "CONFIG_TARGET_ramips_mt7620_DEVICE_5k_w20=y" >> config
         echo "CONFIG_HAS_SUBTARGETS=y" >> config
         echo "CONFIG_HAS_DEVICES=y" >> config
-        cp -rf router_config/low_end_routers/config config
         sed -i '12,14d' diy-script
         sed -i '/tools-y/d' diy-script
         sed -i '/curdir/d' diy-script
