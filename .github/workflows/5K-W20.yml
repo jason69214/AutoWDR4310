@@ -66,6 +66,7 @@ jobs:
         echo "CONFIG_TARGET_ramips_mt7620_DEVICE_5k_w20=y" >> config
         echo "CONFIG_HAS_SUBTARGETS=y" >> config
         echo "CONFIG_HAS_DEVICES=y" >> config
+        cat config
         sed -i '12,14d' diy-script
         sed -i '/tools-y/d' diy-script
         sed -i '/curdir/d' diy-script
@@ -90,6 +91,7 @@ jobs:
       run: |
         cd openwrt
         make defconfig
+        cat .config
         make download -j8
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
