@@ -60,22 +60,22 @@ jobs:
 
     - name: Load custom configuration
       run: |
+        cp -rf config_files/config_16m config
         echo "CONFIG_TARGET_ath79=y" >> config
         echo "CONFIG_TARGET_ath79_generic=y" >> config
         echo "CONFIG_TARGET_ath79_generic_DEVICE_tplink_tl-wdr4310-v1=y" >> config
-        sed -i '/xray/d' config
-        sed -i '/samba4/d' config
-        sed -i '/baidu/d' config
-        sed -i '/kmod-sdhci/d' config
-        sed -i '/iperf3/d' config
-        sed -i '/kmod-usb3/d' config
+        cp -rf router_config/wdr4310/uci-defaults files/etc
+        sed -i '12,14d' diy-script
         sed -i '/tools-y/d' diy-script
-        sed -i '/curdir/d' diy-script
-        cp -r router_config/wdr4310/uci-defaults files/etc
-        rm -rf openwrt/files/etc/dnsmasq.d/chinalist+easylist.conf && rm -rf openwrt/files/etc/dnsmasq.d/cjxlist.conf
-        sed -i '1d' openwrt/files/etc/crontabs/root
-        [ -e files ] && mv files openwrt/files && rm -rf openwrt/files/usr && rm openwrt/files/etc/config/transmission && rm openwrt/files/etc/init.d/xray
-        cp -rf router_config/low_end_routers/run_once openwrt/files/etc/uci-defaults && cp -rf router_config/low_end_routers/unbound.conf openwrt/files/etc/unbound
+        sed -i '/curdir/d' diy-script    
+        rm -rf files/etc/dnsmasq.d/apple.conf
+        rm -rf files/etc/crontabs
+        rm -rf files/etc/config/aliyundrive-webdav
+        rm -rf files/etc/config/transmission
+        rm -rf files/usr
+        [ -e files ] && mv files openwrt/files
+        cp -rf router_config/low_end_routers/run_once openwrt/files/etc/uci-defaults
+        cp -rf router_config/low_end_routers/unbound.conf openwrt/files/etc/unbound
         cp -rf router_config/wdr4310/patches/wdr4310.patch openwrt/
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         mv Aria2/patches openwrt/package/feeds/packages/aria2

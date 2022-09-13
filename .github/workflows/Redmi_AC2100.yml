@@ -1,7 +1,7 @@
 # This is free software, licensed under the MIT License.
 # See /LICENSE for more information.
 
-name: Build Xiaomi_AC2100
+name: Build Redmi_AC2100
 
 on:
   repository_dispatch:
@@ -58,14 +58,14 @@ jobs:
 
     - name: Load custom configuration
       run: |
+        cp -r config_files/config_128m config
         echo "CONFIG_TARGET_ramips=y" >> config
         echo "CONFIG_TARGET_ramips_mt7621=y" >> config
         echo "CONFIG_TARGET_ramips_mt7621_DEVICE_xiaomi_redmi-router-ac2100=y" >> config
-        sed -i '/kmod-sdhci/d' config
-        sed -i '/aliyundrive/d' config
-        sed -i '/baidupcs/d' config
         cp -r router_config/redmi_ac2100/uci-defaults files/etc
-        [ -e files ] && mv files openwrt/files && rm -rf openwrt/files/usr && rm openwrt/files/etc/config/transmission
+        [ -e files ] && mv files openwrt/files
+        rm -rf openwrt/files/usr
+        rm openwrt/files/etc/config/transmission
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         mv Aria2/patches openwrt/package/feeds/packages/aria2
         cp -r tools/. openwrt/tools

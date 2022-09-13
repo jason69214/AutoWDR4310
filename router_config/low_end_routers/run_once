@@ -4,7 +4,6 @@ chmod +x -R /etc/init.d/*
 echo "public:$(openssl passwd 123456)" >/etc/nginx/webdavpasswd
 echo "conf-dir=/etc/dnsmasq.d" >> /etc/dnsmasq.conf
 uci set firewall.@defaults[0].flow_offloading='1'
-uci set firewall.@defaults[0].flow_offloading_hw='1'
 uci add firewall rule 
 uci set firewall.@rule[-1].name="Allow Aliyun SSL"
 uci set firewall.@rule[-1].family="ipv6"
@@ -27,6 +26,5 @@ uci commit
 /etc/init.d/nginx reload
 /etc/init.d/p910nd disable
 /etc/init.d/nfsd disable
-/etc/init.d/wireguard disable
 /etc/init.d/aria2 disable
 exit 0
