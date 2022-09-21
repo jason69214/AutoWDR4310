@@ -1,7 +1,7 @@
 # This is free software, licensed under the MIT License.
 # See /LICENSE for more information.
 
-name: Build Newifi_D1
+name: Build R2S
 
 on:
   repository_dispatch:
