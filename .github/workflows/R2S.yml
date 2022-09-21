@@ -64,6 +64,8 @@ jobs:
         echo "CONFIG_TARGET_rockchip=y" >> config
         echo "CONFIG_TARGET_rockchip_armv8=y" >> config
         echo "CONFIG_TARGET_rockchip_armv8_DEVICE_friendlyarm_nanopi-r2s=y" >> config
+        echo "CONFIG_TARGET_KERNEL_PARTSIZE=16" >> config
+        echo "CONFIG_TARGET_ROOTFS_PARTSIZE=500" >> config
         cp -r router_config/R2S/uci-defaults files/etc
         [ -e files ] && mv files openwrt/files
         rm -rf openwrt/files/usr
