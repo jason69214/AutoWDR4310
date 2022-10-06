@@ -1,7 +1,7 @@
 # This is free software, licensed under the MIT License.
 # See /LICENSE for more information.
 
-name: Build ZTE-E8820s selfuse
+name: Build ZTE-E8820s
 
 on:
   repository_dispatch:
@@ -58,11 +58,11 @@ jobs:
 
     - name: Load custom configuration
       run: |
+	cp -r config_files/config_128m config
         echo "CONFIG_TARGET_ramips=y" >> config
         echo "CONFIG_TARGET_ramips_mt7621=y" >> config
         echo "CONFIG_TARGET_ramips_mt7621_DEVICE_zte_e8820s=y" >> config
-        echo "CONFIG_PACKAGE_rMfakecloud=y" >> config
-        sed -i '/kmod-sdhci/d' config
+	echo "CONFIG_PACKAGE_rMfakecloud=y" >> config
         cp -r router_config/E8820s/uci-defaults files/etc
         cp -rf router_config/E8820s/mt7621_zte_e8820s.dts openwrt/target/linux/ramips/dts/ && cp -rf router_config/E8820s/patches/E8820s.patch openwrt/
         [ -e files ] && mv files openwrt/files && rm -rf openwrt/files/usr && rm openwrt/files/etc/config/transmission
