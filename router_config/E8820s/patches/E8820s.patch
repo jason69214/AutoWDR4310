@@ -1,8 +1,8 @@
 diff --git a/target/linux/ramips/image/mt7621.mk b/target/linux/ramips/image/mt7621.mk
-index b560ce3d95..9fd78430ee 100644
+index c1a9ecfaeb..21120cb1cf 100644
 --- a/target/linux/ramips/image/mt7621.mk
 +++ b/target/linux/ramips/image/mt7621.mk
-@@ -2299,3 +2299,18 @@ define Device/zyxel_wap6805
+@@ -2429,3 +2429,21 @@ define Device/zyxel_wap6805
    IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
  endef
  TARGET_DEVICES += zyxel_wap6805
@@ -15,20 +15,23 @@ index b560ce3d95..9fd78430ee 100644
 +  KERNEL_SIZE := 4096k
 +  UBINIZE_OPTS := -E 5
 +  IMAGE_SIZE := 130304k
++  IMAGES += factory.bin
 +  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
++  IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-ubi | \
++	check-size
 +  DEVICE_VENDOR := ZTE
 +  DEVICE_MODEL := E8820S
 +  DEVICE_PACKAGES := kmod-mt7603 kmod-mt76x2 kmod-usb3 uboot-envtools
 +endef
-+TARGET_DEVICES = zte_e8820s
++TARGET_DEVICES += zte_e8820s
 \ No newline at end of file
 diff --git a/target/linux/ramips/mt7621/base-files/etc/board.d/01_leds b/target/linux/ramips/mt7621/base-files/etc/board.d/01_leds
-index 4b912283e1..af1f2ee66f 100644
+index 5ffa4ecb3a..bbac47b0e2 100644
 --- a/target/linux/ramips/mt7621/base-files/etc/board.d/01_leds
 +++ b/target/linux/ramips/mt7621/base-files/etc/board.d/01_leds
-@@ -168,6 +168,10 @@ zbtlink,zbt-wg1608-16m)
- 	ucidef_set_led_netdev "lan4" "LAN4" "green:lan-4" "lan4"
- 	ucidef_set_led_netdev "wan" "WAN" "green:wan" "wan"
+@@ -184,6 +184,10 @@ zbtlink,zbt-wg1608-16m)
+ zyxel,lte3301-plus)
+ 	ucidef_set_led_netdev "internet" "internet" "white:internet" "wwan0"
  	;;
 +zte,e8820s)
 +	ucidef_set_led_netdev "sys" "SYS_LED" "white:sys" "eth0" "tx rx"
@@ -38,10 +41,10 @@ index 4b912283e1..af1f2ee66f 100644
  
  board_config_flush
 diff --git a/target/linux/ramips/mt7621/base-files/lib/upgrade/platform.sh b/target/linux/ramips/mt7621/base-files/lib/upgrade/platform.sh
-index 9af46202ba..6aac351e1c 100755
+index 05907536fe..232592b9b7 100755
 --- a/target/linux/ramips/mt7621/base-files/lib/upgrade/platform.sh
 +++ b/target/linux/ramips/mt7621/base-files/lib/upgrade/platform.sh
-@@ -138,5 +138,8 @@ platform_do_upgrade() {
+@@ -142,5 +142,8 @@ platform_do_upgrade() {
  	*)
  		default_do_upgrade "$1"
  		;;
